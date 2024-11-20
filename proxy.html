@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simpleee Proxy</title>
+    <title>Simple Proxy</title>
 </head>
 <body>
     <h1>Simple Proxy</h1>
@@ -17,27 +17,28 @@
     <iframe id="proxyIframe" style="width:100%; height:600px;" frameborder="0"></iframe>
 
     <script>
+        // Handle form submission
         document.getElementById('proxyForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+            event.preventDefault();  // Prevent the form from submitting in the traditional way
             
-            var url = document.getElementById('url').value;
-            var iframe = document.getElementById('proxyIframe');
-            
-            // Simple validation
+            var url = document.getElementById('url').value;  // Get the URL from input
+            var iframe = document.getElementById('proxyIframe');  // Get the iframe element
+
+            // Basic validation of the URL
             if (url && isValidUrl(url)) {
-                iframe.src = url;  // Load the entered URL in the iframe
+                iframe.src = url;  // Set the iframe source to the URL entered
             } else {
                 alert('Please enter a valid URL');
             }
         });
 
-        // Basic URL validation
+        // Function to validate if the URL is correctly formed
         function isValidUrl(string) {
             try {
-                new URL(string);
+                new URL(string);  // Try to create a URL object with the input string
                 return true;
             } catch (_) {
-                return false;  
+                return false;  // If it fails, it's not a valid URL
             }
         }
     </script>
