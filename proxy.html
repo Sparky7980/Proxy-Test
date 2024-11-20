@@ -4,58 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Proxy</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        input[type="text"] {
-            width: 300px;
-            padding: 10px;
-        }
-        button {
-            padding: 10px;
-        }
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: #f4f4f4;
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-    </style>
 </head>
 <body>
     <h1>Simple Proxy</h1>
-    <input type="text" id="urlInput" placeholder="Enter URL" />
-    <button onclick="fetchContent()">Fetch</button>
-    <pre id="output"></pre>
+    <form id="proxyForm">
+        <label for="url">Enter URL:</label>
+        <input type="text" id="url" name="url" placeholder="http://example.com" required>
+        <button type="submit">Proxy</button>
+    </form>
+
+    <h2>Requested Content:</h2>
+    <iframe id="proxyIframe" style="width:100%; height:600px;" frameborder="0"></iframe>
 
     <script>
-        async function fetchContent() {
-  const url = document.getElementById('urlInput').value;
-  const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+        document.getElementById('proxyForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var url = document.getElementById('url').value;
+            var iframe = document.getElementById('proxyIframe');
+            
+            // Simple validation
+            if (url && isValidUrl(url)) {
+                iframe.src = url;  // Load the entered URL in the iframe
+            } else {
+                alert('Please enter a valid URL');
+            }
+        });
 
-  try {
-    const response = await fetch(proxyUrl);
-    if (response.ok) { // Check if the response status is 200-299
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        // Handle JSON content
-        const data = await response.json();
-        document.getElementById('output').textContent = data.contents || 'No JSON content';
-      } else {
-        // Handle non-JSON content
-        const text = await response.text();
-        document.getElementById('output').textContent = text;
-      }
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    document.getElementById('output').textContent = 'Error fetching content: ' + error;
-  }
-}
+        // Basic URL validation
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;  
+            }
+        }
     </script>
 </body>
 </html>
