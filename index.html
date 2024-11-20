@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Home Page</title>
+</head>
+<body>
+    <h1>Welcome to the Proxy Server</h1>
+
+    <p>Enter a URL below to proxy it:</p>
+
+    <!-- Form to submit URL -->
+    <form id="proxyForm">
+        <label for="url">Enter URL:</label>
+        <input type="text" id="url" name="url" placeholder="https://example.com" required>
+        <button type="submit">Proxy</button>
+    </form>
+
+    <h2>Requested Content:</h2>
+    <iframe id="proxyIframe" style="width:100%; height:600px;" frameborder="0"></iframe>
+
+    <script>
+        document.getElementById('proxyForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from refreshing the page
+
+            var url = document.getElementById('url').value;
+            var iframe = document.getElementById('proxyIframe');
+            
+            // Construct the proxy URL for the new port 3002
+            var proxyUrl = 'http://localhost:3002/proxy?url=' + encodeURIComponent(url);
+
+            // Load the proxied content into the iframe
+            iframe.src = proxyUrl;
+        });
+    </script>
+</body>
+</html>
