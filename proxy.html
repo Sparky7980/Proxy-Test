@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Proxy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+        }
+        button {
+            padding: 10px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Proxy</h1>
+    <input type="text" id="urlInput" placeholder="Enter URL" />
+    <button onclick="fetchContent()">Fetch</button>
+    <pre id="output"></pre>
+
+    <script>
+        async function fetchContent() {
+            const url = document.getElementById('urlInput').value;
+            const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+
+            try {
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
+                document.getElementById('output').textContent = data.contents;
+            } catch (error) {
+                document.getElementById('output').textContent = 'Error fetching content: ' + error;
+            }
+        }
+    </script>
+</body>
+</html>
