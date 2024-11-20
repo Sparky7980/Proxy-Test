@@ -33,17 +33,29 @@
 
     <script>
         async function fetchContent() {
-            const url = document.getElementById('urlInput').value;
-            const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+  const url = document.getElementById('urlInput').value;
+  const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
 
-            try {
-                const response = await fetch(proxyUrl);
-                const data = await response.json();
-                document.getElementById('output').textContent = data.contents;
-            } catch (error) {
-                document.getElementById('output').textContent = 'Error fetching content: ' + error;
-            }
-        }
+  try {
+    const response = await fetch(proxyUrl);
+    if (response.ok) { // Check if the response status is 200-299
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        // Handle JSON content
+        const data = await response.json();
+        document.getElementById('output').textContent = data.contents || 'No JSON content';
+      } else {
+        // Handle non-JSON content
+        const text = await response.text();
+        document.getElementById('output').textContent = text;
+      }
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    document.getElementById('output').textContent = 'Error fetching content: ' + error;
+  }
+}
     </script>
 </body>
 </html>
